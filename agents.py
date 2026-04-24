@@ -5,8 +5,8 @@ from langchain_core.output_parsers import StrOutputParser
 from tools import get_web_search_tool, scrape_url 
 
 #1st agent 
-def build_search_agent(google_api_key: str, tavily_api_key: str):
-    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, google_api_key=google_api_key)
+def build_search_agent(google_api_key: str, tavily_api_key: str, model_name: str = "gemini-1.5-flash"):
+    llm = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=google_api_key)
     web_search = get_web_search_tool(tavily_api_key)
     return create_agent(
         model = llm,
@@ -15,8 +15,8 @@ def build_search_agent(google_api_key: str, tavily_api_key: str):
 
 #2nd agent 
 
-def build_reader_agent(google_api_key: str):
-    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, google_api_key=google_api_key)
+def build_reader_agent(google_api_key: str, model_name: str = "gemini-1.5-flash"):
+    llm = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=google_api_key)
     return create_agent(
         model = llm,
         tools = [scrape_url]
@@ -25,8 +25,8 @@ def build_reader_agent(google_api_key: str):
 
 #writer chain 
 
-def get_writer_chain(google_api_key: str):
-    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, google_api_key=google_api_key)
+def get_writer_chain(google_api_key: str, model_name: str = "gemini-1.5-flash"):
+    llm = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=google_api_key)
     writer_prompt = ChatPromptTemplate.from_messages([
         ("system", "You are an expert research writer. Write clear, structured and insightful reports."),
         ("human", """Write a detailed research report on the topic below.
@@ -49,8 +49,8 @@ Be detailed, factual and professional."""),
 
 #critic_chain 
 
-def get_critic_chain(google_api_key: str):
-    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, google_api_key=google_api_key)
+def get_critic_chain(google_api_key: str, model_name: str = "gemini-1.5-flash"):
+    llm = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=google_api_key)
     critic_prompt = ChatPromptTemplate.from_messages([
          ("system", "You are a sharp and constructive research critic. Be honest and specific."),
         ("human", """Review the research report below and evaluate it strictly.

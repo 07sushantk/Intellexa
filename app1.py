@@ -25,6 +25,12 @@ tavily_key = st.sidebar.text_input(
     placeholder="Enter your Tavily API Key..."
 )
 
+model_choice = st.sidebar.selectbox(
+    "Google Gemini Model",
+    ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-1.5-pro", "gemini-pro"],
+    index=0
+)
+
 if "google_api_key" not in st.session_state:
     st.session_state.google_api_key = ""
 
@@ -50,24 +56,29 @@ if not st.session_state.google_api_key or not st.session_state.tavily_api_key:
 else:
     st.sidebar.success("✅ API Keys loaded successfully!")
     
-    # Initialize Agents ONLY ONCE per key change
-    if "agents_initialized" not in st.session_state or st.session_state.get("_prev_gkey") != google_key or st.session_state.get("_prev_tkey") != tavily_key:
+    # Initialize Agents ONLY ONCE per key/model change
+    if "agents_initialized" not in st.session_state or st.session_state.get("_prev_gkey") != google_key or st.session_state.get("_prev_tkey") != tavily_key or st.session_state.get("_prev_model") != model_choice:
         st.session_state.search_agent = build_search_agent(
             st.session_state.google_api_key,
-            st.session_state.tavily_api_key
+            st.session_state.tavily_api_key,
+            model_name=model_choice
         )
         st.session_state.reader_agent = build_reader_agent(
-            st.session_state.google_api_key
+            st.session_state.google_api_key,
+            model_name=model_choice
         )
         st.session_state.writer_chain = get_writer_chain(
-            st.session_state.google_api_key
+            st.session_state.google_api_key,
+            model_name=model_choice
         )
         st.session_state.critic_chain = get_critic_chain(
-            st.session_state.google_api_key
+            st.session_state.google_api_key,
+            model_name=model_choice
         )
         st.session_state.agents_initialized = True
         st.session_state._prev_gkey = google_key
         st.session_state._prev_tkey = tavily_key
+        st.session_state._prev_model = model_choice
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
