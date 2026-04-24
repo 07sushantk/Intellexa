@@ -482,6 +482,8 @@ if st.session_state.running and not st.session_state.done:
     results = {}
     topic_val = st.session_state.topic_input
 
+    st.info("⏳ Please wait, the AI agents are researching and generating your report. This process typically takes a few moments...")
+
     try:
         # ── Step 1: Search ──
         with st.spinner("🔍  Search Agent is working…"):
