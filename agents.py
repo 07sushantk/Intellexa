@@ -2,17 +2,12 @@ from langchain.agents import create_agent
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-from tools import web_search , scrape_url 
-from dotenv import load_dotenv
-
-load_dotenv()
-
-#model setup 
-llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0)
-
+from tools import get_web_search_tool, scrape_url 
 
 #1st agent 
-def build_search_agent():
+def build_search_agent(google_api_key: str, tavily_api_key: str):
+    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, google_api_key=google_api_key)
+    web_search = get_web_search_tool(tavily_api_key)
     return create_agent(
         model = llm,
         tools= [web_search]
@@ -20,7 +15,8 @@ def build_search_agent():
 
 #2nd agent 
 
-def build_reader_agent():
+def build_reader_agent(google_api_key: str):
+    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, google_api_key=google_api_key)
     return create_agent(
         model = llm,
         tools = [scrape_url]
@@ -29,9 +25,11 @@ def build_reader_agent():
 
 #writer chain 
 
-writer_prompt = ChatPromptTemplate.from_messages([
-    ("system", "You are an expert research writer. Write clear, structured and insightful reports."),
-    ("human", """Write a detailed research report on the topic below.
+def get_writer_chain(google_api_key: str):
+    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, google_api_key=google_api_key)
+    writer_prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are an expert research writer. Write clear, structured and insightful reports."),
+        ("human", """Write a detailed research report on the topic below.
 
 Topic: {topic}
 
@@ -45,15 +43,17 @@ Structure the report as:
 - Sources (list all URLs found in the research)
 
 Be detailed, factual and professional."""),
-])
+    ])
 
-writer_chain = writer_prompt | llm | StrOutputParser()
+    return writer_prompt | llm | StrOutputParser()
 
 #critic_chain 
 
-critic_prompt = ChatPromptTemplate.from_messages([
-     ("system", "You are a sharp and constructive research critic. Be honest and specific."),
-    ("human", """Review the research report below and evaluate it strictly.
+def get_critic_chain(google_api_key: str):
+    llm = ChatGoogleGenerativeAI(model="gemini-flash-latest", temperature=0, google_api_key=google_api_key)
+    critic_prompt = ChatPromptTemplate.from_messages([
+         ("system", "You are a sharp and constructive research critic. Be honest and specific."),
+        ("human", """Review the research report below and evaluate it strictly.
 
 Report:
 {report}
@@ -72,7 +72,6 @@ Areas to Improve:
 
 One line verdict:
 ..."""),
-])
+    ])
 
-critic_chain = critic_prompt | llm | StrOutputParser()
-
+    return critic_prompt | llm | StrOutputParser()

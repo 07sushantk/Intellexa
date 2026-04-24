@@ -1,14 +1,73 @@
 import streamlit as st
 import time
-from agents import build_reader_agent, build_search_agent, writer_chain, critic_chain
+from agents import build_reader_agent, build_search_agent, get_writer_chain, get_critic_chain
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="ResearchMind · AI Research Agent",
     page_icon="🔬",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
+
+# ── API Key Configuration ──────────────────────────────────────────────────────
+st.sidebar.title("🔐 API Configuration")
+
+google_key = st.sidebar.text_input(
+    "Google Gemini API Key",
+    type="password",
+    placeholder="Enter your Gemini API Key..."
+)
+
+tavily_key = st.sidebar.text_input(
+    "Tavily API Key",
+    type="password",
+    placeholder="Enter your Tavily API Key..."
+)
+
+if "google_api_key" not in st.session_state:
+    st.session_state.google_api_key = ""
+
+if "tavily_api_key" not in st.session_state:
+    st.session_state.tavily_api_key = ""
+
+st.session_state.google_api_key = google_key
+st.session_state.tavily_api_key = tavily_key
+
+with st.sidebar.expander("❓ How to get API Keys"):
+    st.markdown("""
+**Google Gemini API Key**
+1. Go to: https://aistudio.google.com/app/apikey  
+2. Login → Click "Create API Key"
+
+**Tavily API Key**
+1. Go to: https://app.tavily.com  
+2. Sign up → Generate API Key
+""")
+
+if not st.session_state.google_api_key or not st.session_state.tavily_api_key:
+    st.sidebar.warning("⚠️ Please enter both API keys to continue.")
+else:
+    st.sidebar.success("✅ API Keys loaded successfully!")
+    
+    # Initialize Agents ONLY ONCE per key change
+    if "agents_initialized" not in st.session_state or st.session_state.get("_prev_gkey") != google_key or st.session_state.get("_prev_tkey") != tavily_key:
+        st.session_state.search_agent = build_search_agent(
+            st.session_state.google_api_key,
+            st.session_state.tavily_api_key
+        )
+        st.session_state.reader_agent = build_reader_agent(
+            st.session_state.google_api_key
+        )
+        st.session_state.writer_chain = get_writer_chain(
+            st.session_state.google_api_key
+        )
+        st.session_state.critic_chain = get_critic_chain(
+            st.session_state.google_api_key
+        )
+        st.session_state.agents_initialized = True
+        st.session_state._prev_gkey = google_key
+        st.session_state._prev_tkey = tavily_key
 
 # ── Custom CSS ────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -396,7 +455,10 @@ with col_pipeline:
 
 # ── Run pipeline ──────────────────────────────────────────────────────────────
 if run_btn:
-    if not topic.strip():
+    if not st.session_state.google_api_key or not st.session_state.tavily_api_key:
+        st.warning("⚠️ Please enter both API keys in the sidebar to continue.")
+        st.stop()
+    elif not topic.strip():
         st.warning("Please enter a research topic first.")
     else:
         st.session_state.results = {}
@@ -410,7 +472,7 @@ if st.session_state.running and not st.session_state.done:
 
     # ── Step 1: Search ──
     with st.spinner("🔍  Search Agent is working…"):
-        search_agent = build_search_agent()
+        search_agent = st.session_state.search_agent
         sr = search_agent.invoke({
             "messages": [("user", f"Find recent, reliable and detailed information about: {topic_val}")]
         })
@@ -420,7 +482,7 @@ if st.session_state.running and not st.session_state.done:
 
     # ── Step 2: Reader ──
     with st.spinner("📄  Reader Agent is scraping top resources…"):
-        reader_agent = build_reader_agent()
+        reader_agent = st.session_state.reader_agent
         rr = reader_agent.invoke({
             "messages": [("user",
                 f"Based on the following search results about '{topic_val}', "
@@ -437,7 +499,7 @@ if st.session_state.running and not st.session_state.done:
             f"SEARCH RESULTS:\n{results['search']}\n\n"
             f"DETAILED SCRAPED CONTENT:\n{results['reader']}"
         )
-        results["writer"] = writer_chain.invoke({
+        results["writer"] = st.session_state.writer_chain.invoke({
             "topic": topic_val,
             "research": research_combined
         })
@@ -445,7 +507,7 @@ if st.session_state.running and not st.session_state.done:
 
     # ── Step 4: Critic ──
     with st.spinner("🧐  Critic is reviewing the report…"):
-        results["critic"] = critic_chain.invoke({
+        results["critic"] = st.session_state.critic_chain.invoke({
             "report": results["writer"]
         })
         st.session_state.results = dict(results)
