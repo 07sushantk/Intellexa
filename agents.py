@@ -5,7 +5,7 @@ from langchain_core.output_parsers import StrOutputParser
 from tools import get_web_search_tool, scrape_url 
 
 #1st agent 
-def build_search_agent(google_api_key: str, tavily_api_key: str, model_name: str = "gemini-1.5-flash"):
+def build_search_agent(google_api_key: str, tavily_api_key: str, model_name: str = "gemini-flash-latest"):
     llm = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=google_api_key)
     web_search = get_web_search_tool(tavily_api_key)
     return create_agent(
@@ -15,7 +15,7 @@ def build_search_agent(google_api_key: str, tavily_api_key: str, model_name: str
 
 #2nd agent 
 
-def build_reader_agent(google_api_key: str, model_name: str = "gemini-1.5-flash"):
+def build_reader_agent(google_api_key: str, model_name: str = "gemini-flash-latest"):
     llm = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=google_api_key)
     return create_agent(
         model = llm,
@@ -25,7 +25,7 @@ def build_reader_agent(google_api_key: str, model_name: str = "gemini-1.5-flash"
 
 #writer chain 
 
-def get_writer_chain(google_api_key: str, model_name: str = "gemini-1.5-flash"):
+def get_writer_chain(google_api_key: str, model_name: str = "gemini-flash-latest"):
     llm = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=google_api_key)
     writer_prompt = ChatPromptTemplate.from_messages([
         ("system", "You are an expert research writer. Write clear, structured and insightful reports."),
@@ -49,7 +49,7 @@ Be detailed, factual and professional."""),
 
 #critic_chain 
 
-def get_critic_chain(google_api_key: str, model_name: str = "gemini-1.5-flash"):
+def get_critic_chain(google_api_key: str, model_name: str = "gemini-flash-latest"):
     llm = ChatGoogleGenerativeAI(model=model_name, temperature=0, google_api_key=google_api_key)
     critic_prompt = ChatPromptTemplate.from_messages([
          ("system", "You are a sharp and constructive research critic. Be honest and specific."),

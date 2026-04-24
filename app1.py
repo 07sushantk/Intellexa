@@ -27,7 +27,7 @@ tavily_key = st.sidebar.text_input(
 
 model_choice = st.sidebar.selectbox(
     "Google Gemini Model",
-    ["gemini-1.5-flash", "gemini-1.5-flash-8b", "gemini-1.5-pro", "gemini-pro"],
+    ["gemini-flash-latest", "gemini-1.5-pro-latest", "gemini-pro"],
     index=0
 )
 
