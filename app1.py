@@ -4,7 +4,7 @@ from agents import build_reader_agent, build_search_agent, get_writer_chain, get
 
 # ── Page config ──────────────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="ResearchMind · AI Research Agent",
+    page_title="Intellexa · AI Research Agent",
     page_icon="🔬",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -81,10 +81,10 @@ html, body, [class*="css"] {
 }
 
 .stApp {
-    background: #0a0a0f;
+    background: #050508;
     background-image:
-        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(255,140,50,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(255,80,30,0.08) 0%, transparent 55%);
+        radial-gradient(ellipse 80% 50% at 20% -10%, rgba(176, 38, 255, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 110%, rgba(0, 240, 255, 0.08) 0%, transparent 55%);
 }
 
 /* ── Hide default streamlit chrome ── */
@@ -103,7 +103,7 @@ html, body, [class*="css"] {
     font-weight: 500;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: #ff8c32;
+    color: #00f0ff;
     margin-bottom: 1rem;
     opacity: 0.9;
 }
@@ -117,7 +117,8 @@ html, body, [class*="css"] {
     margin: 0 0 1rem;
 }
 .hero h1 span {
-    color: #ff8c32;
+    color: #00f0ff;
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
 }
 .hero-sub {
     font-size: 1.05rem;
@@ -131,14 +132,14 @@ html, body, [class*="css"] {
 /* ── Divider ── */
 .divider {
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,140,50,0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.3), transparent);
     margin: 2rem 0;
 }
 
 /* ── Input card ── */
 .input-card {
     background: rgba(255,255,255,0.03);
-    border: 1px solid rgba(255,140,50,0.15);
+    border: 1px solid rgba(0, 240, 255, 0.15);
     border-radius: 16px;
     padding: 2rem 2.5rem;
     margin-bottom: 2rem;
@@ -148,7 +149,7 @@ html, body, [class*="css"] {
 /* ── Streamlit input overrides ── */
 .stTextInput > div > div > input {
     background: rgba(255,255,255,0.05) !important;
-    border: 1px solid rgba(255,140,50,0.25) !important;
+    border: 1px solid rgba(0, 240, 255, 0.25) !important;
     border-radius: 10px !important;
     color: #f0ebe0 !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -157,22 +158,22 @@ html, body, [class*="css"] {
     transition: border-color 0.2s, box-shadow 0.2s !important;
 }
 .stTextInput > div > div > input:focus {
-    border-color: #ff8c32 !important;
-    box-shadow: 0 0 0 3px rgba(255,140,50,0.12) !important;
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 0 3px rgba(0, 240, 255, 0.12) !important;
 }
 .stTextInput > label {
     font-family: 'DM Mono', monospace !important;
     font-size: 0.72rem !important;
     letter-spacing: 0.15em !important;
     text-transform: uppercase !important;
-    color: #ff8c32 !important;
+    color: #00f0ff !important;
     font-weight: 500 !important;
 }
 
 /* ── Button ── */
 .stButton > button {
-    background: linear-gradient(135deg, #ff8c32 0%, #ff5a1a 100%) !important;
-    color: #0a0a0f !important;
+    background: linear-gradient(135deg, #b026ff 0%, #00f0ff 100%) !important;
+    color: #ffffff !important;
     font-family: 'Syne', sans-serif !important;
     font-weight: 700 !important;
     font-size: 0.95rem !important;
@@ -182,12 +183,12 @@ html, body, [class*="css"] {
     padding: 0.7rem 2.2rem !important;
     cursor: pointer !important;
     transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s !important;
-    box-shadow: 0 4px 20px rgba(255,140,50,0.3) !important;
+    box-shadow: 0 4px 20px rgba(176, 38, 255, 0.3) !important;
     width: 100%;
 }
 .stButton > button:hover {
     transform: translateY(-2px) !important;
-    box-shadow: 0 8px 28px rgba(255,140,50,0.4) !important;
+    box-shadow: 0 8px 28px rgba(0, 240, 255, 0.4) !important;
     opacity: 0.95 !important;
 }
 .stButton > button:active {
@@ -206,8 +207,8 @@ html, body, [class*="css"] {
     transition: border-color 0.3s;
 }
 .step-card.active {
-    border-color: rgba(255,140,50,0.4);
-    background: rgba(255,140,50,0.04);
+    border-color: rgba(0, 240, 255, 0.4);
+    background: rgba(0, 240, 255, 0.04);
 }
 .step-card.done {
     border-color: rgba(80,200,120,0.3);
@@ -222,7 +223,7 @@ html, body, [class*="css"] {
     background: rgba(255,255,255,0.05);
     transition: background 0.3s;
 }
-.step-card.active::before { background: #ff8c32; }
+.step-card.active::before { background: #00f0ff; }
 .step-card.done::before   { background: #50c878; }
 
 .step-header {
@@ -236,7 +237,7 @@ html, body, [class*="css"] {
     font-size: 0.68rem;
     font-weight: 500;
     letter-spacing: 0.15em;
-    color: #ff8c32;
+    color: #00f0ff;
     opacity: 0.7;
 }
 .step-title {
@@ -252,7 +253,7 @@ html, body, [class*="css"] {
     letter-spacing: 0.1em;
 }
 .status-waiting  { color: #555; }
-.status-running  { color: #ff8c32; }
+.status-running  { color: #00f0ff; }
 .status-done     { color: #50c878; }
 
 /* ── Result panels ── */
@@ -270,10 +271,10 @@ html, body, [class*="css"] {
     font-weight: 500;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #ff8c32;
+    color: #00f0ff;
     margin-bottom: 1rem;
     padding-bottom: 0.7rem;
-    border-bottom: 1px solid rgba(255,140,50,0.15);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.15);
 }
 .result-content {
     font-size: 0.92rem;
@@ -286,7 +287,7 @@ html, body, [class*="css"] {
 /* ── Report & feedback panels ── */
 .report-panel {
     background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(255,140,50,0.2);
+    border: 1px solid rgba(176, 38, 255, 0.2);
     border-radius: 16px;
     padding: 2rem 2.5rem;
     margin-top: 1rem;
@@ -307,8 +308,8 @@ html, body, [class*="css"] {
     padding-bottom: 0.7rem;
 }
 .panel-label.orange {
-    color: #ff8c32;
-    border-bottom: 1px solid rgba(255,140,50,0.15);
+    color: #b026ff;
+    border-bottom: 1px solid rgba(176, 38, 255, 0.15);
 }
 .panel-label.green {
     color: #50c878;
@@ -316,7 +317,7 @@ html, body, [class*="css"] {
 }
 
 /* ── Progress text ── */
-.stSpinner > div { color: #ff8c32 !important; }
+.stSpinner > div { color: #00f0ff !important; }
 
 /* ── Expander ── */
 details summary {
@@ -379,11 +380,11 @@ for key in ("results", "running", "done"):
 # ── Hero ──────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="hero">
-    <div class="hero-eyebrow">Multi-Agent AI System</div>
-    <h1>Research<span>Mind</span></h1>
+    <div class="hero-eyebrow">Advanced AI Research Agent</div>
+    <h1>Intel<span>lexa</span></h1>
     <p class="hero-sub">
         Four specialized AI agents collaborate — searching, scraping, writing,
-        and critiquing — to deliver a polished research report on any topic.
+        and critiquing — to deliver a comprehensive, polished research report on any topic.
     </p>
 </div>
 <div class="divider"></div>
@@ -470,50 +471,58 @@ if st.session_state.running and not st.session_state.done:
     results = {}
     topic_val = st.session_state.topic_input
 
-    # ── Step 1: Search ──
-    with st.spinner("🔍  Search Agent is working…"):
-        search_agent = st.session_state.search_agent
-        sr = search_agent.invoke({
-            "messages": [("user", f"Find recent, reliable and detailed information about: {topic_val}")]
-        })
-        results["search"] = sr["messages"][-1].content
-        st.session_state.results = dict(results)
-    st.rerun() if False else None   # keep inline for now
+    try:
+        # ── Step 1: Search ──
+        with st.spinner("🔍  Search Agent is working…"):
+            search_agent = st.session_state.search_agent
+            sr = search_agent.invoke({
+                "messages": [("user", f"Find recent, reliable and detailed information about: {topic_val}")]
+            })
+            results["search"] = sr["messages"][-1].content
+            st.session_state.results = dict(results)
+        
+        # ── Step 2: Reader ──
+        with st.spinner("📄  Reader Agent is scraping top resources…"):
+            reader_agent = st.session_state.reader_agent
+            rr = reader_agent.invoke({
+                "messages": [("user",
+                    f"Based on the following search results about '{topic_val}', "
+                    f"pick the most relevant URL and scrape it for deeper content.\n\n"
+                    f"Search Results:\n{results['search'][:800]}"
+                )]
+            })
+            results["reader"] = rr["messages"][-1].content
+            st.session_state.results = dict(results)
 
-    # ── Step 2: Reader ──
-    with st.spinner("📄  Reader Agent is scraping top resources…"):
-        reader_agent = st.session_state.reader_agent
-        rr = reader_agent.invoke({
-            "messages": [("user",
-                f"Based on the following search results about '{topic_val}', "
-                f"pick the most relevant URL and scrape it for deeper content.\n\n"
-                f"Search Results:\n{results['search'][:800]}"
-            )]
-        })
-        results["reader"] = rr["messages"][-1].content
-        st.session_state.results = dict(results)
+        # ── Step 3: Writer ──
+        with st.spinner("✍️  Writer is drafting the report…"):
+            research_combined = (
+                f"SEARCH RESULTS:\n{results['search']}\n\n"
+                f"DETAILED SCRAPED CONTENT:\n{results['reader']}"
+            )
+            results["writer"] = st.session_state.writer_chain.invoke({
+                "topic": topic_val,
+                "research": research_combined
+            })
+            st.session_state.results = dict(results)
 
-    # ── Step 3: Writer ──
-    with st.spinner("✍️  Writer is drafting the report…"):
-        research_combined = (
-            f"SEARCH RESULTS:\n{results['search']}\n\n"
-            f"DETAILED SCRAPED CONTENT:\n{results['reader']}"
-        )
-        results["writer"] = st.session_state.writer_chain.invoke({
-            "topic": topic_val,
-            "research": research_combined
-        })
-        st.session_state.results = dict(results)
+        # ── Step 4: Critic ──
+        with st.spinner("🧐  Critic is reviewing the report…"):
+            results["critic"] = st.session_state.critic_chain.invoke({
+                "report": results["writer"]
+            })
+            st.session_state.results = dict(results)
+            
+        st.session_state.done = True
 
-    # ── Step 4: Critic ──
-    with st.spinner("🧐  Critic is reviewing the report…"):
-        results["critic"] = st.session_state.critic_chain.invoke({
-            "report": results["writer"]
-        })
-        st.session_state.results = dict(results)
-
+    except Exception as e:
+        error_msg = str(e)
+        st.error(f"🚨 An error occurred during execution: {error_msg}")
+        if "429" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
+            st.warning("💡 You have hit the Google Gemini API rate limit. Please check your quota or wait a moment before trying again.")
+        st.session_state.done = True # Stop the loading state
+    
     st.session_state.running = False
-    st.session_state.done = True
     st.rerun()
 
 
@@ -565,6 +574,6 @@ if r:
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown("""
 <div class="notice">
-    ResearchMind · Powered by LangChain multi-agent pipeline · Built with Streamlit
+    Intellexa · Powered by LangChain multi-agent pipeline · Built with Streamlit
 </div>
 """, unsafe_allow_html=True)
