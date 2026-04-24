@@ -516,10 +516,7 @@ if st.session_state.running and not st.session_state.done:
         st.session_state.done = True
 
     except Exception as e:
-        error_msg = str(e)
-        st.error(f"🚨 An error occurred during execution: {error_msg}")
-        if "429" in error_msg or "RESOURCE_EXHAUSTED" in error_msg:
-            st.warning("💡 You have hit the Google Gemini API rate limit. Please check your quota or wait a moment before trying again.")
+        st.session_state.error_msg = str(e)
         st.session_state.done = True # Stop the loading state
     
     st.session_state.running = False
@@ -528,6 +525,13 @@ if st.session_state.running and not st.session_state.done:
 
 # ── Results display ───────────────────────────────────────────────────────────
 r = st.session_state.results
+err = st.session_state.get("error_msg")
+
+if err:
+    st.error(f"🚨 An error occurred during execution: {err}")
+    if "429" in err or "RESOURCE_EXHAUSTED" in err:
+        st.warning("💡 You have hit the Google Gemini API rate limit. Please check your quota or wait a moment before trying again.")
+    st.session_state.error_msg = None  # Clear it after displaying
 
 if r:
     st.markdown('<div class="divider"></div>', unsafe_allow_html=True)
